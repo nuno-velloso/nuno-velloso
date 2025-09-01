@@ -6,16 +6,13 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  // Fecha ao navegar
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  // fecha o menu quando muda de rota/hash
+  useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
-  // Esc fecha + bloqueio de scroll quando aberto
+  // Esc fecha menu + bloqueio de scroll
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       window.removeEventListener("keydown", onKey);
@@ -25,47 +22,42 @@ export default function Header() {
 
   return (
     <>
-      <header className="text-gray-600 body-font border-b bg-white/90 backdrop-blur sticky top-0 z-50">
-        <div className="container mx-auto flex items-center justify-between p-5">
-          {/* Logo / Marca */}
-          <Link to="/" className="flex items-center text-gray-900">
+      <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur text-gray-700">
+        {/* altura fixa do header: 64px mobile / 80px desktop */}
+        <div className="container mx-auto flex items-center justify-between px-5 h-16 md:h-20">
+          {/* Marca */}
+          <Link to="/" className="flex items-center">
             <img
               src={logo}
               alt="Nuno Velloso"
               className="h-10 w-10 md:h-14 md:w-14 rounded-full object-contain"
             />
-            <span className="ml-3 md:ml-4 text-xl">Nuno Velloso</span>
+            <span className="ml-3 md:ml-4 text-lg md:text-xl font-medium text-gray-900">
+              Nuno Velloso
+            </span>
           </Link>
 
-          {/* Navegação desktop */}
-          <nav className="hidden md:flex items-center text-base gap-4">
+          {/* Navegação (desktop) */}
+          <nav className="hidden md:flex items-center gap-6">
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
-                `px-2 py-1 ${
-                  isActive ? "font-semibold underline" : "hover:underline"
-                }`
+                isActive ? "font-semibold underline" : "hover:underline"
               }
             >
               Home
             </NavLink>
-            <NavLink
-              to="/servicos"
-              className={({ isActive }) =>
-                `px-2 py-1 ${
-                  isActive ? "font-semibold underline" : "hover:underline"
-                }`
-              }
-            >
+
+            {/* Aponta para a secção na Home */}
+            <Link to="/#servicos" className="hover:underline">
               Serviços
-            </NavLink>
+            </Link>
+
             <NavLink
               to="/contactos"
               className={({ isActive }) =>
-                `px-2 py-1 ${
-                  isActive ? "font-semibold underline" : "hover:underline"
-                }`
+                isActive ? "font-semibold underline" : "hover:underline"
               }
             >
               Contactos
@@ -81,7 +73,6 @@ export default function Header() {
             aria-controls="mobile-menu"
           >
             {open ? (
-              // Ícone X
               <svg
                 viewBox="0 0 24 24"
                 className="h-6 w-6"
@@ -96,7 +87,6 @@ export default function Header() {
                 />
               </svg>
             ) : (
-              // Ícone hambúrguer
               <svg
                 viewBox="0 0 24 24"
                 className="h-6 w-6"
@@ -114,10 +104,10 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Menu mobile (slide down) */}
+        {/* Menu mobile */}
         <div
           id="mobile-menu"
-          className={`md:hidden border-t bg-white transition-all duration-200 relative z-50 ${
+          className={`md:hidden border-t bg-white transition-all duration-200 ${
             open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
@@ -133,16 +123,9 @@ export default function Header() {
             >
               Home
             </NavLink>
-            <NavLink
-              to="/servicos"
-              className={({ isActive }) =>
-                `py-2 ${
-                  isActive ? "font-semibold underline" : "hover:underline"
-                }`
-              }
-            >
+            <Link to="/#servicos" className="py-2 hover:underline">
               Serviços
-            </NavLink>
+            </Link>
             <NavLink
               to="/contactos"
               className={({ isActive }) =>
@@ -157,7 +140,7 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Overlay (só mobile) */}
+      {/* Overlay para fechar ao clicar fora (só mobile) */}
       <button
         type="button"
         onClick={() => setOpen(false)}

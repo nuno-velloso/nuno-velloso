@@ -1,30 +1,45 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Servicos from "./pages/Servicos";
 import Contactos from "./pages/Contactos";
 
-function Layout() {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
+// Scroll suave para hash
+function ScrollToHash() {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location.pathname, location.hash]);
+  return null;
 }
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="servicos" element={<Servicos />} />
-        <Route path="contactos" element={<Contactos />} />
-      </Route>
-    </Routes>
+    <BrowserRouter>
+      <Header />
+      <ScrollToHash />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/servicos"
+          element={<Navigate to="/#servicos" replace />}
+        />
+        <Route path="/contactos" element={<Contactos />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
