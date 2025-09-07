@@ -98,7 +98,7 @@ export default function ServicesGrid() {
             to="/contactos"
             className="inline-flex items-center rounded bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"
           >
-            Falar connosco
+            Fale connosco
           </Link>
           <p className="mt-2 text-sm text-gray-500">
             Dúvidas ou marcações? Estamos deste lado.

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import hero from "../assets/fotos/main.jpg";
 import instrutor1 from "../assets/instrutores/instrutor1.jpg";
-import instrutor2 from "../assets/instrutores/instrutor2.jpg";
+import instrutor2 from "../assets/galeria/nuno-velloso/filipa-velloso.jpg";
 import logo from "../assets/logo/logo.png";
 
 import ServicesCarousel from "../components/ServicesCarousel";
@@ -51,7 +51,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      /* =================== LOGO (banda) =================== */
+      {/* =================== LOGO (banda) =================== */}
       <section aria-label="Marca" className="bg-white mt-20 md:mt-28">
         <div className="container mx-auto px-5 py-14 md:py-20 flex items-center justify-center">
           <div className="h-32 w-32 md:h-40 md:w-40 lg:h-44 lg:w-44">
