@@ -1,13 +1,13 @@
-/* eslint-env node */
-require("dotenv").config();
-const mongoose = require("mongoose");
-const Event = require("./models/Event");
+import "dotenv/config";
+import mongoose from "mongoose";
+import Event from "./models/Event.js";
 
 (async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.DB_NAME,
     });
+
     await Event.deleteMany({});
     await Event.insertMany([
       {

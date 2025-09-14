@@ -1,27 +1,22 @@
-/* eslint-env node */
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import mongoose from "mongoose";
+
+import eventsRouter from "./routes/events.js";
 
 const app = express();
-
-// Middlewares básicos
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 
 // Health + info
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.get("/api/info", (_req, res) => res.json({ name: "Nuno Velloso API" }));
 
 // Routers
-const eventsRouter = require("./routes/eventsRouter");
 app.use("/api/events", eventsRouter);
-
-// 404 para API desconhecida (opcional)
-app.use("/api", (_req, res) => {
-  res.status(404).json({ error: "Not found" });
-});
 
 // Handler de erros
 app.use((err, _req, res, _next) => {
@@ -29,10 +24,9 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-// Boot
 const { MONGODB_URI, DB_NAME, PORT = 8080 } = process.env;
 if (!MONGODB_URI) {
-  console.error("❌ MONGODB_URI em falta no .env");
+  console.error("❌ MONGODB_URI em falta no .env (server/.env)");
   process.exit(1);
 }
 

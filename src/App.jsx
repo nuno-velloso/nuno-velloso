@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import EventsPage from "./pages/Events";
 import Contactos from "./pages/Contactos";
 
 // Scroll suave para hash
