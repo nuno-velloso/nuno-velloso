@@ -1,34 +1,35 @@
-// server/seed.js
-import "dotenv/config";
-import mongoose from "mongoose";
-import Event from "./models/Event.js";
+/* eslint-env node */
+require("dotenv").config();
+const mongoose = require("mongoose");
+const Event = require("./models/Event");
 
-const { MONGODB_URI, DB_NAME } = process.env;
-
-const data = [
-  {
-    title: "Torneio de Abril 2025",
-    date: "2025-04-12",
-    description: "Resumo do torneio...",
-    cover: "https://cdn.exemplo.com/eventos/abril25/capa.jpg",
-    gallery: [
-      "https://cdn.exemplo.com/eventos/abril25/foto1.jpg",
-      "https://cdn.exemplo.com/eventos/abril25/foto2.jpg",
-    ],
-    videos: ["https://www.youtube.com/watch?v=ABCDEFG"],
-    featured: true,
-  },
-];
-
-async function run() {
-  await mongoose.connect(MONGODB_URI, { dbName: DB_NAME || "nv_site_dev" });
-  await Event.deleteMany({});
-  await Event.insertMany(data);
-  console.log("✅ Seed concluído");
-  await mongoose.disconnect();
-}
-
-run().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.DB_NAME,
+    });
+    await Event.deleteMany({});
+    await Event.insertMany([
+      {
+        title: "Aula de Iniciação – Pista Coberta",
+        date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        location: "Manège Coberto",
+        instructor: "Nuno Velloso",
+        description: "Primeiro contacto com o cavalo. Postura e segurança.",
+      },
+      {
+        title: "Trilho pela Quinta da Marinha",
+        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        location: "Exterior",
+        instructor: "Sandra",
+        description: "Passeio relaxado em trilho marcado.",
+      },
+    ]);
+    console.log("Seed OK");
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await mongoose.disconnect();
+    process.exit(0);
+  }
+})();

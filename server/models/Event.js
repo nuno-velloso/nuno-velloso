@@ -1,31 +1,16 @@
-// server/models/Event.js
-import mongoose from "mongoose";
+/* eslint-env node */
+const mongoose = require("mongoose");
 
 const EventSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true, trim: true },
-    slug: { type: String, unique: true, index: true },
-    date: { type: Date },
-    description: { type: String },
-    cover: { type: String }, // URL da capa
-    gallery: [{ type: String }], // URLs de fotos
-    videos: [{ type: String }], // URLs/IDs do YouTube
-    featured: { type: Boolean, default: false },
+    title: { type: String, required: true, trim: true, maxlength: 120 },
+    date: { type: Date, required: true }, // data/hora do evento
+    location: { type: String, default: "Quinta da Marinha" },
+    instructor: { type: String, default: "" },
+    description: { type: String, default: "" },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
 
-// cria automaticamente slug se não passar
-EventSchema.pre("save", function (next) {
-  if (!this.slug && this.title) {
-    this.slug = this.title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-  }
-  next();
-});
-
-export default mongoose.model("Event", EventSchema);
+module.exports = mongoose.model("Event", EventSchema);

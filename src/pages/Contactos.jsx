@@ -1,34 +1,46 @@
+// src/pages/Contactos.jsx
 export default function Contactos() {
   const ADDRESS = "Centro Hípico Quinta da Marinha, Cascais, Portugal";
   const PHONE_DISPLAY = "914 203 139";
   const PHONE_LINK = "+351914203139";
   const EMAIL = "nunovelloso@sapo.pt";
+
   const MAPS_URL =
     "https://www.google.com/maps?q=Centro+H%C3%ADpico+Quinta+da+Marinha,+Cascais&hl=pt";
+  const MAPS_EMBED = `${MAPS_URL}&output=embed`;
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const email = fd.get("email");
+    const message = fd.get("message");
+    const subject = `Pedido de contacto (${email})`;
+    const body = `Morada: ${ADDRESS}\nTelefone: ${PHONE_DISPLAY}\n\nMensagem:\n${message}\n\n— Enviado via site`;
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <section className="container mx-auto px-5 py-12 md:py-16">
       <h1 className="text-4xl font-bold text-gray-900 mb-8">Contactos</h1>
 
-      {/* igualar alturas */}
       <div className="grid md:grid-cols-2 items-stretch gap-8">
         {/* MAPA */}
         <div className="w-full overflow-hidden rounded-lg">
-          {/* Em mobile usa aspeto; em md+ enche a coluna toda */}
           <div className="relative aspect-[4/3] md:aspect-auto md:h-full md:min-h-[520px]">
             <iframe
               title="mapa"
               className="absolute inset-0 h-full w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://maps.google.com/maps?width=100%25&height=600&hl=pt&q=Centro%20H%C3%ADpico%20Quinta%20da%20Marinha,%20Cascais,%20Portugal&t=&z=14&ie=UTF8&iwloc=B&output=embed"
+              src={MAPS_EMBED}
             />
           </div>
         </div>
 
-        {/* INFO + BOTÕES + FORM — sem borda, mesma altura */}
+        {/* INFO + AÇÕES + FORM */}
         <div className="bg-white rounded-lg p-6 md:p-8 shadow-sm h-full">
-          {/* Dados */}
           <dl className="space-y-3 text-gray-700 mb-6">
             <div>
               <dt className="font-semibold">Morada:</dt>
@@ -62,7 +74,6 @@ export default function Contactos() {
             </div>
           </dl>
 
-          {/* Botões de ação */}
           <div className="mb-8 flex flex-wrap gap-3">
             <a
               href={MAPS_URL}
@@ -70,6 +81,7 @@ export default function Contactos() {
               rel="noopener noreferrer"
               className="inline-flex items-center rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
             >
+              {/* ícone pin */}
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
@@ -95,6 +107,7 @@ export default function Contactos() {
               href={`tel:${PHONE_LINK}`}
               className="inline-flex items-center rounded border px-4 py-2 text-gray-900 hover:bg-gray-50"
             >
+              {/* ícone telefone */}
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
@@ -112,17 +125,12 @@ export default function Contactos() {
             </a>
           </div>
 
-          {/* Formulário (mantém a tua integração se usas emailJS) */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("Mensagem enviada. Obrigado!");
-            }}
-          >
+          <form onSubmit={onSubmit}>
             <label className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
+              name="email"
               type="email"
               required
               className="mt-1 mb-4 w-full rounded border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
@@ -133,6 +141,7 @@ export default function Contactos() {
               Mensagem
             </label>
             <textarea
+              name="message"
               rows={7}
               required
               className="mt-1 w-full rounded border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"

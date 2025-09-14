@@ -1,42 +1,49 @@
-// server/index.js
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
-import mongoose from "mongoose";
-import eventsRouter from "./routes/events.js";
+/* eslint-env node */
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
 
-const app = express(); // <-- cria app primeiro!
+const app = express();
 
-// middlewares
-app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
+// Middlewares básicos
+app.use(cors());
 app.use(express.json());
-app.use(morgan("dev"));
 
-// health/info
-app.get("/health", (_, res) => res.json({ ok: true }));
-app.get("/api/info", (_, res) => res.json({ name: "Nuno Velloso API" }));
+// Health + info
+app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/api/info", (_req, res) => res.json({ name: "Nuno Velloso API" }));
 
-// rotas
+// Routers
+const eventsRouter = require("./routes/eventsRouter");
 app.use("/api/events", eventsRouter);
 
-// Mongo
-const { MONGODB_URI, DB_NAME, PORT } = process.env;
-
-if (!MONGODB_URI) {
-  console.error("❌ MONGODB_URI não definido no .env");
-  process.exit(1);
-}
-
-try {
-  await mongoose.connect(MONGODB_URI, { dbName: DB_NAME || "nv_site_dev" });
-  console.log("✅ MongoDB ligado");
-} catch (err) {
-  console.error("❌ Erro a ligar ao MongoDB:", err.message);
-  process.exit(1);
-}
-
-const port = Number(PORT) || 8080;
-app.listen(port, () => {
-  console.log(`🚀 Server a correr em http://localhost:${port}`);
+// 404 para API desconhecida (opcional)
+app.use("/api", (_req, res) => {
+  res.status(404).json({ error: "Not found" });
 });
+
+// Handler de erros
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+// Boot
+const { MONGODB_URI, DB_NAME, PORT = 8080 } = process.env;
+if (!MONGODB_URI) {
+  console.error("❌ MONGODB_URI em falta no .env");
+  process.exit(1);
+}
+
+mongoose
+  .connect(MONGODB_URI, { dbName: DB_NAME })
+  .then(() => {
+    app.listen(PORT, () =>
+      console.log(`✅ API ligada em http://localhost:${PORT}`)
+    );
+  })
+  .catch((e) => {
+    console.error("❌ Erro a ligar ao Mongo:", e);
+    process.exit(1);
+  });
