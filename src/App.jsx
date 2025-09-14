@@ -36,6 +36,7 @@ export default function App() {
           path="/servicos"
           element={<Navigate to="/#servicos" replace />}
         />
+        <Route path="/eventos" element={<EventsPage />} /> {/* <- aqui */}
         <Route path="/contactos" element={<Contactos />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

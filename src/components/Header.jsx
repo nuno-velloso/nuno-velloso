@@ -136,6 +136,7 @@ export default function Header() {
             >
               Contactos
             </NavLink>
+            <NavLink to="/eventos">Eventos</NavLink>
           </nav>
         </div>
       </header>
