@@ -6,13 +6,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import EventsPage from "./pages/Events";
 import Contactos from "./pages/Contactos";
 
-// Scroll suave para hash
 function ScrollToHash() {
   const location = useLocation();
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function App() {
           path="/servicos"
           element={<Navigate to="/#servicos" replace />}
         />
-        <Route path="/eventos" element={<EventsPage />} /> {/* <- aqui */}
+        <Route path="/eventos" element={<Navigate to="/#galeria" replace />} />
         <Route path="/contactos" element={<Contactos />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

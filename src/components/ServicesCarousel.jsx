@@ -1,18 +1,18 @@
 // src/components/ServicesCarousel.jsx
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-// IMAGENS (ajusta caminhos se necessário)
-import imgPasseios from "../assets/galeria/colonia-ferias/colonia5.jpg";
-import imgVolteio from "../assets/galeria/colonia-ferias/colonia7.jpg";
-import imgIniciacao from "../assets/galeria/colonia-ferias/colonia6.jpg";
-import imgEnsino from "../assets/galeria/colonia-ferias/colonia4.jpg";
-import imgObstaculos from "../assets/galeria/colonia-ferias/colonia3.jpg";
-import imgAcompanhamento from "../assets/galeria/colonia-ferias/colonia7.jpg";
-import imgCavaloProprio from "../assets/galeria/colonia-ferias/colonia1.jpg";
-import imgColonia from "../assets/galeria/colonia-ferias/colonia5.jpg";
+// === IMAGENS (ajusta se algum caminho não existir no teu projeto) ===
+import imgPasseios from "../assets/galeria/passeios/1.jpg";
+import imgVolteio from "../assets/galeria/fotos-volteio/1.jpg";
+import imgIniciacao from "../assets/galeria/fotos-volteio/2.jpg";
+import imgEnsino from "../assets/galeria/concursos/1.jpg";
+import imgObstaculos from "../assets/galeria/concursos/3.jpg";
+import imgAcompanhamento from "../assets/galeria/colonias-ferias/4.jpg";
+import imgCavaloProprio from "../assets/galeria/colonias-ferias/13.jpg";
+import imgColonia from "../assets/galeria/colonias-ferias/5.jpg";
 
-// DADOS
+// === DADOS ===
 const services = [
   {
     slug: "passeios",
@@ -20,7 +20,7 @@ const services = [
     desc: "Passeios pela Quinta da Marinha. A escola disponibiliza toque.",
     badges: ["6+ anos", "30–50 min", "≤ 90 kg"],
     img: imgPasseios,
-    imgPos: "center 20%", // ver mais topo
+    imgPos: "center 20%",
   },
   {
     slug: "volteio",
@@ -36,7 +36,6 @@ const services = [
     desc: "Bases de segurança e condução. O aluno ganha controlo do cavalo.",
     badges: ["Iniciantes"],
     img: imgIniciacao,
-    // sem imgPos -> centra por defeito
   },
   {
     slug: "ensino",
@@ -82,13 +81,15 @@ export default function ServicesCarousel() {
   const [index, setIndex] = useState(0);
   const count = services.length;
 
+  // navegação
+  const clamp = useCallback((i) => (i + count) % count, [count]);
+  const go = useCallback((i) => setIndex(clamp(i)), [clamp]);
+  const next = useCallback(() => setIndex((i) => clamp(i + 1)), [clamp]);
+  const prev = useCallback(() => setIndex((i) => clamp(i - 1)), [clamp]);
+
   // swipe
   const startX = useRef(0);
   const dragging = useRef(false);
-
-  const go = (i) => setIndex((prev) => (i + count) % count);
-  const next = () => go(index + 1);
-  const prev = () => go(index - 1);
 
   // setas do teclado
   useEffect(() => {
@@ -98,10 +99,9 @@ export default function ServicesCarousel() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+  }, [next, prev]);
 
-  // swipe handlers
+  // handlers de swipe
   const onPointerDown = (e) => {
     dragging.current = true;
     startX.current = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
@@ -116,7 +116,6 @@ export default function ServicesCarousel() {
 
   return (
     <section id="servicos" className="bg-gray-50 border-t scroll-mt-20">
-      {/* container alinhado com o resto do site */}
       <div className="container mx-auto px-5 py-16 md:py-24 relative">
         {/* Título */}
         <div className="mb-8 md:mb-12 text-center">
@@ -145,7 +144,6 @@ export default function ServicesCarousel() {
               const hasImg = Boolean(s.img);
               return (
                 <div key={s.slug} className="w-full shrink-0 px-2">
-                  {/* Cartão largo */}
                   <article className="mx-auto max-w-7xl overflow-hidden rounded-2xl border bg-white shadow-sm">
                     <div
                       className={`grid items-stretch md:h-[360px] ${
@@ -175,16 +173,14 @@ export default function ServicesCarousel() {
                         </div>
                       </div>
 
-                      {/* Imagem (metade do slide) */}
+                      {/* Imagem */}
                       {hasImg && (
                         <div className="relative h-[240px] sm:h-[300px] md:h-auto">
                           <img
                             src={s.img}
                             alt={s.title}
                             className="absolute inset-0 h-full w-full object-cover"
-                            style={{
-                              objectPosition: s.imgPos || "center center",
-                            }}
+                            style={{ objectPosition: s.imgPos || "center" }}
                             loading="lazy"
                             decoding="async"
                           />
@@ -248,7 +244,7 @@ export default function ServicesCarousel() {
             {services.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setIndex(i)}
+                onClick={() => go(i)}
                 aria-label={`Ir para slide ${i + 1}`}
                 className={`h-2 w-2 rounded-full ${
                   i === index ? "bg-indigo-600" : "bg-gray-300"

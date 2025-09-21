@@ -6,10 +6,8 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  // fecha o menu quando muda de rota/hash
   useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
-  // Esc fecha menu + bloqueio de scroll
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
@@ -23,9 +21,7 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur text-gray-700">
-        {/* altura fixa do header: 64px mobile / 80px desktop */}
         <div className="container mx-auto flex items-center justify-between px-5 h-16 md:h-20">
-          {/* Marca */}
           <Link to="/" className="flex items-center">
             <img
               src={logo}
@@ -37,7 +33,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Navegação (desktop) */}
           <nav className="hidden md:flex items-center gap-6">
             <NavLink
               to="/"
@@ -48,12 +43,12 @@ export default function Header() {
             >
               Home
             </NavLink>
-
-            {/* Aponta para a secção na Home */}
             <Link to="/#servicos" className="hover:underline">
               Serviços
             </Link>
-
+            <Link to="/#galeria" className="hover:underline">
+              Eventos
+            </Link>
             <NavLink
               to="/contactos"
               className={({ isActive }) =>
@@ -64,7 +59,6 @@ export default function Header() {
             </NavLink>
           </nav>
 
-          {/* Botão hambúrguer (mobile) */}
           <button
             className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             onClick={() => setOpen((v) => !v)}
@@ -104,7 +98,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Menu mobile */}
         <div
           id="mobile-menu"
           className={`md:hidden border-t bg-white transition-all duration-200 ${
@@ -126,6 +119,9 @@ export default function Header() {
             <Link to="/#servicos" className="py-2 hover:underline">
               Serviços
             </Link>
+            <Link to="/#galeria" className="py-2 hover:underline">
+              Eventos
+            </Link>
             <NavLink
               to="/contactos"
               className={({ isActive }) =>
@@ -136,12 +132,10 @@ export default function Header() {
             >
               Contactos
             </NavLink>
-            <NavLink to="/eventos">Eventos</NavLink>
           </nav>
         </div>
       </header>
 
-      {/* Overlay para fechar ao clicar fora (só mobile) */}
       <button
         type="button"
         onClick={() => setOpen(false)}
