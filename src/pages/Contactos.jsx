@@ -132,7 +132,7 @@ export default function Contactos() {
 
             <div>
               <dt className="font-semibold">Horário:</dt>
-              <dd>Sempre aberto</dd>
+              <dd>Das 9h-13h e 15h-18h</dd>
             </div>
           </dl>
 
@@ -209,10 +209,6 @@ export default function Contactos() {
             >
               {status.type === "loading" ? "A enviar..." : "Enviar"}
             </button>
-
-            <p className="text-xs text-gray-500">
-              Resposta típica: 24–48h úteis.
-            </p>
 
             {status.type === "success" && (
               <p className="text-sm text-green-600 mt-2">{status.msg}</p>
