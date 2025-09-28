@@ -9,7 +9,7 @@ import galleryItemsDefault from "../data/galleryItems";
  *  - initial?: number (default 24)
  *  - step?: number (default 24)
  */
-export default function SimpleGallery({ items, initial = 24, step = 24 }) {
+export default function SimpleGallery({ items, initial = 11, step = 24 }) {
   const list =
     Array.isArray(items) && items.length ? items : galleryItemsDefault;
 

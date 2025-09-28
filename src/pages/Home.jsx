@@ -204,7 +204,7 @@ export default function Home() {
       <section id="galeria" className="px-5 py-12 md:py-16 bg-white">
         <div className="container mx-auto">
           {/* Sem props -> usa automaticamente src/data/galleryItems.js */}
-          <SimpleGallery initial={24} step={24} />
+          <SimpleGallery initial={11} step={24} />
         </div>
       </section>
     </>
