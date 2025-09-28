@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 
 import logo from "../assets/logo/logo.png";
 import ServicesCarousel from "../components/ServicesCarousel";
-import EventGalleries from "../components/EventGalleries";
+import SimpleGallery from "../components/SimpleGallery"; // <- este fica
+
+// ... imports das imagens do hero (1..8) ...
 
 /* =========================
    HERO (imports diretos 1..4)
@@ -198,9 +200,12 @@ export default function Home() {
         <ServicesCarousel />
       </section>
 
-      {/* =================== GALERIA (lightbox) =================== */}
+      {/* =================== GALERIA (masonry + lightbox) =================== */}
       <section id="galeria" className="px-5 py-12 md:py-16 bg-white">
-        <EventGalleries limit={3} />
+        <div className="container mx-auto">
+          {/* Sem props -> usa automaticamente src/data/galleryItems.js */}
+          <SimpleGallery initial={24} step={24} />
+        </div>
       </section>
     </>
   );

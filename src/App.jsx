@@ -39,6 +39,8 @@ export default function App() {
         <Route path="/eventos" element={<Navigate to="/#galeria" replace />} />
         <Route path="/contactos" element={<Contactos />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        // import {Navigate} from "react-router-dom";
+        <Route path="/galeria" element={<Navigate to="/#galeria" replace />} />
       </Routes>
       <Footer />
     </BrowserRouter>
