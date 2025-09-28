@@ -1,7 +1,6 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 
-// lê só uma vez as env vars
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -13,6 +12,7 @@ export default function Contactos() {
   const EMAIL = "nunovelloso@sapo.pt";
   const MAPS_URL =
     "https://www.google.com/maps?q=Centro+H%C3%ADpico+Quinta+da+Marinha,+Cascais&hl=pt";
+  const FACEBOOK_URL = "https://www.facebook.com/NunoVellosoRidingSchool";
 
   const [status, setStatus] = useState({ type: "idle", msg: "" });
 
@@ -25,7 +25,7 @@ export default function Contactos() {
       from_name: form.name.value.trim(),
       from_email: form.email.value.trim(),
       message: form.message.value.trim(),
-      _honeypot: form.company?.value || "", // anti-spam
+      _honeypot: form.company?.value || "",
     };
 
     if (!data.from_email || !data.message) {
@@ -80,6 +80,7 @@ export default function Contactos() {
               <dt className="font-semibold">Morada:</dt>
               <dd>{ADDRESS}</dd>
             </div>
+
             <div>
               <dt className="font-semibold">Telefone:</dt>
               <dd>
@@ -91,6 +92,32 @@ export default function Contactos() {
                 </a>
               </dd>
             </div>
+
+            {/* NOVA SECÇÃO: REDES */}
+            <div>
+              <dt className="font-semibold">Redes:</dt>
+              <dd>
+                <a
+                  href={FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-indigo-600 hover:underline"
+                >
+                  {/* ícone facebook */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06C2 17.08 5.66 21.2 10.44 22v-7.04H7.9v-2.9h2.54V9.84c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22C18.34 21.2 22 17.08 22 12.06z" />
+                  </svg>
+                  Facebook — Nuno Velloso Riding School
+                </a>
+              </dd>
+            </div>
+
             <div>
               <dt className="font-semibold">Email:</dt>
               <dd>
@@ -102,6 +129,7 @@ export default function Contactos() {
                 </a>
               </dd>
             </div>
+
             <div>
               <dt className="font-semibold">Horário:</dt>
               <dd>Sempre aberto</dd>

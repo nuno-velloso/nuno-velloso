@@ -1,18 +1,18 @@
 // src/components/ServicesCarousel.jsx
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-// === IMAGENS (ajusta se algum caminho não existir no teu projeto) ===
+/* IMAGENS — ajusta caminhos/extensões se precisares */
 import imgPasseios from "../assets/galeria/passeios/1.jpg";
 import imgVolteio from "../assets/galeria/fotos-volteio/1.jpg";
-import imgIniciacao from "../assets/galeria/fotos-volteio/2.jpg";
-import imgEnsino from "../assets/galeria/concursos/1.jpg";
-import imgObstaculos from "../assets/galeria/concursos/3.jpg";
-import imgAcompanhamento from "../assets/galeria/colonias-ferias/4.jpg";
+import imgIniciacao from "../assets/galeria/aulas-ensino/1.jpg";
+import imgEnsino from "../assets/galeria/aulas-ensino/2.jpg";
+import imgObstaculos from "../assets/galeria/aulas-obstaculos/3.jpg";
+import imgAcompanhamento from "../assets/galeria/aulas-ensino/2.jpg";
 import imgCavaloProprio from "../assets/galeria/colonias-ferias/13.jpg";
-import imgColonia from "../assets/galeria/colonias-ferias/5.jpg";
+import imgColonia from "../assets/galeria/colonias-ferias/1.jpg";
+import imgConcursos from "../assets/galeria/concursos/1.jpg"; // <- NOVO serviço
 
-// === DADOS ===
 const services = [
   {
     slug: "passeios",
@@ -75,21 +75,29 @@ const services = [
     img: imgColonia,
     imgPos: "center 20%",
   },
+
+  // ===== NOVO SERVIÇO =====
+  {
+    slug: "concursos",
+    title: "Concursos",
+    desc: "Participação em provas oficiais e apoio logístico/técnico em competição.",
+    badges: ["Calendário FEP", "Treino + Prova"],
+    img: imgConcursos,
+    imgPos: "center 40%",
+  },
 ];
 
 export default function ServicesCarousel() {
   const [index, setIndex] = useState(0);
   const count = services.length;
 
-  // navegação
-  const clamp = useCallback((i) => (i + count) % count, [count]);
-  const go = useCallback((i) => setIndex(clamp(i)), [clamp]);
-  const next = useCallback(() => setIndex((i) => clamp(i + 1)), [clamp]);
-  const prev = useCallback(() => setIndex((i) => clamp(i - 1)), [clamp]);
-
   // swipe
   const startX = useRef(0);
   const dragging = useRef(false);
+
+  const go = (i) => setIndex((prev) => (i + count) % count);
+  const next = () => go(index + 1);
+  const prev = () => go(index - 1);
 
   // setas do teclado
   useEffect(() => {
@@ -99,9 +107,10 @@ export default function ServicesCarousel() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
 
-  // handlers de swipe
+  // swipe handlers
   const onPointerDown = (e) => {
     dragging.current = true;
     startX.current = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
@@ -119,7 +128,7 @@ export default function ServicesCarousel() {
       <div className="container mx-auto px-5 py-16 md:py-24 relative">
         {/* Título */}
         <div className="mb-8 md:mb-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
             Serviços
           </h2>
           <p className="mt-3 text-base md:text-lg text-gray-600">
@@ -136,6 +145,51 @@ export default function ServicesCarousel() {
           onTouchStart={onPointerDown}
           onTouchEnd={onPointerUp}
         >
+          {/* Setas (fora dos cartões) */}
+          {count > 1 && (
+            <>
+              <button
+                onClick={prev}
+                aria-label="Anterior"
+                className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={next}
+                aria-label="Seguinte"
+                className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </>
+          )}
+
+          {/* Slides */}
           <div
             className="flex transition-transform duration-300 ease-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
@@ -180,7 +234,9 @@ export default function ServicesCarousel() {
                             src={s.img}
                             alt={s.title}
                             className="absolute inset-0 h-full w-full object-cover"
-                            style={{ objectPosition: s.imgPos || "center" }}
+                            style={{
+                              objectPosition: s.imgPos || "center center",
+                            }}
                             loading="lazy"
                             decoding="async"
                           />
@@ -192,50 +248,6 @@ export default function ServicesCarousel() {
               );
             })}
           </div>
-
-          {/* Setas (desktop) */}
-          {count > 1 && (
-            <>
-              <button
-                onClick={prev}
-                aria-label="Anterior"
-                className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={next}
-                aria-label="Seguinte"
-                className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </>
-          )}
         </div>
 
         {/* Pontos */}
@@ -244,7 +256,7 @@ export default function ServicesCarousel() {
             {services.map((_, i) => (
               <button
                 key={i}
-                onClick={() => go(i)}
+                onClick={() => setIndex(i)}
                 aria-label={`Ir para slide ${i + 1}`}
                 className={`h-2 w-2 rounded-full ${
                   i === index ? "bg-indigo-600" : "bg-gray-300"

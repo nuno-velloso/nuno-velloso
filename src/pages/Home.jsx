@@ -3,83 +3,78 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import logo from "../assets/logo/logo.png";
-import heroFallback from "../assets/fotos/main.jpg";
-
 import ServicesCarousel from "../components/ServicesCarousel";
 import EventGalleries from "../components/EventGalleries";
 
-/* ===== HERO: procura “picadeiros*” e usa fotos 1..4 (se existirem) ===== */
-const heroModsAny = import.meta.glob(
-  "../assets/**/picadeiros*/*.{jpg,jpeg,png,JPG,JPEG,PNG}",
-  { eager: true }
-);
-const heroSources = Object.entries(heroModsAny)
-  .filter(([p]) => /[/\\](1|2|3|4)\.(jpg|jpeg|png)$/i.test(p))
-  .sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
-  )
-  .map(([, mod]) => mod?.default)
-  .filter(Boolean);
+/* =========================
+   HERO (imports diretos 1..4)
+   ========================= */
+import hero1 from "../assets/galeria/picadeiros-e-quinta/1.jpg";
+import hero2 from "../assets/galeria/picadeiros-e-quinta/2.jpg";
+import hero3 from "../assets/galeria/picadeiros-e-quinta/3.jpg";
+import hero4 from "../assets/galeria/picadeiros-e-quinta/4.jpg";
+import hero5 from "../assets/galeria/picadeiros-e-quinta/5.jpg";
+import hero6 from "../assets/galeria/picadeiros-e-quinta/6.jpg";
+import hero7 from "../assets/galeria/picadeiros-e-quinta/7.jpg";
+import hero8 from "../assets/galeria/picadeiros-e-quinta/8.jpg";
 
-/* ===== pega as imagens 5,9,10 da pasta nuno-velloso ===== */
-function getNunoImages() {
-  const mods = import.meta.glob(
-    "../assets/galeria/nuno-velloso/*.{jpg,jpeg,png,JPG,JPEG,PNG}",
-    { eager: true }
-  );
-  const entries = Object.entries(mods).map(([path, mod]) => {
-    const m = path.match(/[/\\](\d+)\.(jpg|jpeg|png)$/i);
-    return m ? { id: Number(m[1]), url: mod?.default } : null;
-  });
-  const byId = new Map(entries.filter(Boolean).map((o) => [o.id, o.url]));
-  return { img5: byId.get(5), img9: byId.get(9), img10: byId.get(10) };
-}
+const heroSlides = [
+  { src: hero1, alt: "Quinta da Marinha — 1/8" },
+  { src: hero2, alt: "Quinta da Marinha — 2/8" },
+  { src: hero3, alt: "Quinta da Marinha — 3/8" },
+  { src: hero4, alt: "Quinta da Marinha — 4/8" },
+  { src: hero5, alt: "Quinta da Marinha — 5/8" },
+  { src: hero6, alt: "Quinta da Marinha — 6/8" },
+  { src: hero7, alt: "Quinta da Marinha — 7/8" },
+  { src: hero8, alt: "Quinta da Marinha — 8/8" },
+];
+
+/* =========================
+   BIO (imports diretos 5,9,10)
+   ========================= */
+import nuno5 from "../assets/galeria/nuno-velloso/5.jpg";
+import nuno9 from "../assets/galeria/nuno-velloso/9.jpg";
+import nuno10 from "../assets/galeria/nuno-velloso/10.jpg";
+
+const bioSlides = [
+  { src: nuno5, alt: "Nuno Velloso — foto 1" },
+  { src: nuno9, alt: "Nuno Velloso — foto 2" },
+  { src: nuno10, alt: "Nuno Velloso — foto 3" },
+];
 
 export default function Home() {
-  /* ---------------- HERO (sem setas) ---------------- */
-  const slides =
-    heroSources.length > 0
-      ? heroSources.map((src, i) => ({
-          src,
-          alt: `Quinta da Marinha — picadeiro e trilhos (${i + 1}/${
-            heroSources.length
-          })`,
-        }))
-      : [{ src: heroFallback, alt: "Centro Hípico - imagem de destaque" }];
-
-  const [idx, setIdx] = useState(0);
-
+  /* =================== HERO autoplay =================== */
+  const [heroIdx, setHeroIdx] = useState(0);
   useEffect(() => {
-    if (slides.length < 2) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % slides.length), 5000);
+    const id = setInterval(
+      () => setHeroIdx((i) => (i + 1) % heroSlides.length),
+      5000
+    );
     return () => clearInterval(id);
-  }, [slides.length]);
+  }, []);
 
+  /* =================== BIO slideshow (direita) =================== */
+  const [bioIdx, setBioIdx] = useState(0);
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "ArrowLeft")
-        setIdx((i) => (i - 1 + slides.length) % slides.length);
-      if (e.key === "ArrowRight") setIdx((i) => (i + 1) % slides.length);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [slides.length]);
-
-  /* ---------------- Imagens do Nuno ---------------- */
-  const { img5, img9, img10 } = getNunoImages();
+    const id = setInterval(
+      () => setBioIdx((i) => (i + 1) % bioSlides.length),
+      4500
+    );
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <>
-      {/* HERO */}
+      {/* =================== HERO =================== */}
       <section className="relative h-[calc(100svh-64px)] md:h-[calc(100vh-80px)]">
         <div className="absolute inset-0">
-          {slides.map((s, i) => (
+          {heroSlides.map((s, i) => (
             <img
               key={i}
               src={s.src}
               alt={s.alt}
               className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ${
-                i === idx ? "opacity-100" : "opacity-0"
+                i === heroIdx ? "opacity-100" : "opacity-0"
               }`}
               loading={i === 0 ? "eager" : "lazy"}
               decoding={i === 0 ? "sync" : "async"}
@@ -114,24 +109,22 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {slides.length > 1 && (
-          <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 flex gap-2">
-            {slides.map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 w-1.5 rounded-full ${
-                  i === idx ? "bg-white" : "bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
-        )}
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 flex gap-2">
+          {heroSlides.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 w-1.5 rounded-full ${
+                i === heroIdx ? "bg-white" : "bg-white/50"
+              }`}
+            />
+          ))}
+        </div>
       </section>
 
-      {/* LOGO */}
-      <section aria-label="Marca" className="bg-white mt-20 md:mt-28">
-        <div className="container mx-auto px-5 py-14 md:py-20 flex items-center justify-center">
-          <div className="h-32 w-32 md:h-40 md:w-40 lg:h-44 lg:w-44">
+      {/* =================== LOGO =================== */}
+      <section aria-label="Marca" className="bg-white mt-16 md:mt-24">
+        <div className="container mx-auto px-5 py-12 md:py-16 flex items-center justify-center">
+          <div className="h-28 w-28 md:h-36 md:w-36 lg:h-40 lg:w-40">
             <img
               src={logo}
               alt="Escola de Equitação Nuno Velloso — logótipo"
@@ -141,105 +134,71 @@ export default function Home() {
         </div>
       </section>
 
-      {/* INSTRUTOR (Nuno) – fotos menores, texto maior e com largura limitada */}
+      {/* =================== BIO: texto à esquerda + slideshow à direita =================== */}
       <section className="bg-white">
-        <div className="container mx-auto px-5 mt-4 md:mt-6">
-          <h2 className="text-left text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-8 md:mb-12">
-            O nosso instrutor
-          </h2>
-        </div>
+        <div className="container mx-auto px-5 py-12 md:py-16 grid md:grid-cols-2 gap-10 md:gap-16 items-start">
+          {/* Texto (esquerda) */}
+          <div className="space-y-6 md:space-y-7">
+            <p className="text-base md:text-lg text-gray-700 leading-7 md:leading-8">
+              Professor de equitação credenciado pela FEP desde 1980 e
+              proprietário da Escola de Equitação da Quinta da Marinha até 1995.
+              Diretor do Hipódromo Manuel Possolo de 2000 a 2005. Atualmente,
+              proprietário da Escola de Equitação Nuno Velloso, situada na
+              Quinta da Marinha.
+            </p>
+            <p className="text-base md:text-lg text-gray-700 leading-7 md:leading-8">
+              Cavaleiro de Obstáculos, tendo concursado até 2020. Vice-Campeão
+              Nacional de Veteranos (2005) e Campeão Nacional de Veteranos
+              (2006), com diversas vitórias em provas nacionais e
+              internacionais, destacando-se: Grande Prémio de Alenquer (2001),
+              Grande Prémio de Santarém e Seis Barras de Santarém.
+            </p>
+            <p className="text-base md:text-lg text-gray-700 leading-7 md:leading-8">
+              Como instrutor, orientou vários alunos que alcançaram pódios em
+              Campeonatos Nacionais, incluindo: 1.º lugar de Juvenis (2012) —
+              Sydney Rous; Vice-Campeã Nacional de Iniciados (1991) — Filipa
+              Velloso; Medalha de Bronze (1990) — José Bueri Antero; 3.º lugar
+              Júnior (1993) — Paulo Nóbrega Lopes; Medalha de Bronze Juvenis
+              (1993) — Filipa Velloso; Medalha de Bronze Júnior (2009) — Teresa
+              Fortunato; além de inúmeras vitórias e classificações ao longo dos
+              anos.
+            </p>
+          </div>
 
-        <div className="container mx-auto px-5 pb-6 md:pb-10 space-y-14 md:space-y-20">
-          {/* Bloco 1: imagem à esquerda (foto 5) */}
-          <article className="md:flex md:items-center md:gap-12">
-            {img5 && (
-              <div className="md:w-4/12 w-full mb-6 md:mb-0">
-                <div className="mx-auto max-w-[420px] aspect-[4/5] overflow-hidden rounded-2xl shadow-md">
-                  <img
-                    src={img5}
-                    alt="Nuno Velloso — momentos"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="md:w-8/12 w-full text-gray-700">
-              <h3 className="sr-only">Biografia — Parte 1</h3>
-              <p className="text-lg md:text-2xl lg:text-[26px] leading-relaxed md:leading-9 lg:leading-9 md:max-w-[700px]">
-                Professor de equitação credenciado pela FEP desde 1980 e
-                proprietário da Escola de Equitação da Quinta da Marinha até
-                1995. Diretor do Hipódromo Manuel Possolo de 2000 a 2005.
-                Atualmente, proprietário da Escola de Equitação Nuno Velloso,
-                situada na Quinta da Marinha.
-              </p>
+          {/* Slideshow (direita) */}
+          <div className="relative w-full max-w-[520px] mx-auto aspect-[4/5] rounded-2xl overflow-hidden shadow-sm">
+            {bioSlides.map((s, i) => (
+              <img
+                key={i}
+                src={s.src}
+                alt={s.alt}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                  i === bioIdx ? "opacity-100" : "opacity-0"
+                }`}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding={i === 0 ? "sync" : "async"}
+              />
+            ))}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+              {bioSlides.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    i === bioIdx ? "bg-white" : "bg-white/60"
+                  }`}
+                />
+              ))}
             </div>
-          </article>
-
-          {/* Bloco 2: imagem à direita (foto 9) */}
-          <article className="md:flex md:flex-row-reverse md:items-center md:gap-12">
-            {img9 && (
-              <div className="md:w-4/12 w-full mb-6 md:mb-0">
-                <div className="mx-auto max-w-[420px] aspect-[4/5] overflow-hidden rounded-2xl shadow-md">
-                  <img
-                    src={img9}
-                    alt="Nuno Velloso — competições"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="md:w-8/12 w-full text-gray-700">
-              <h3 className="sr-only">Biografia — Parte 2</h3>
-              <p className="text-lg md:text-2xl lg:text-[26px] leading-relaxed md:leading-9 lg:leading-9 md:max-w-[700px]">
-                Cavaleiro de Obstáculos, tendo concursado até 2020. Vice-Campeão
-                Nacional de Veteranos (2005) e Campeão Nacional de Veteranos
-                (2006), com diversas vitórias em provas nacionais e
-                internacionais, destacando-se: Grande Prémio de Alenquer (2001),
-                Grande Prémio de Santarém e Seis Barras de Santarém.
-              </p>
-            </div>
-          </article>
-
-          {/* Bloco 3: imagem à esquerda (foto 10) */}
-          <article className="md:flex md:items-center md:gap-12">
-            {img10 && (
-              <div className="md:w-4/12 w-full mb-6 md:mb-0">
-                <div className="mx-auto max-w-[420px] aspect-[4/5] overflow-hidden rounded-2xl shadow-md">
-                  <img
-                    src={img10}
-                    alt="Nuno Velloso — alunos e resultados"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="md:w-8/12 w-full text-gray-700">
-              <h3 className="sr-only">Biografia — Parte 3</h3>
-              <p className="text-lg md:text-2xl lg:text-[26px] leading-relaxed md:leading-9 lg:leading-9 md:max-w-[700px]">
-                Como instrutor, orientou vários alunos que alcançaram pódios em
-                Campeonatos Nacionais, incluindo: 1.º lugar de Juvenis (2012) —
-                Sydney Rous; Vice-Campeã Nacional de Iniciados (1991) — Filipa
-                Velloso; Medalha de Bronze (1990) — José Bueri Antero; 3.º lugar
-                Júnior (1993) — Paulo Nóbrega Lopes; Medalha de Bronze Juvenis
-                (1993) — Filipa Velloso; Medalha de Bronze Júnior (2009) —
-                Teresa Fortunato; além de inúmeras vitórias e classificações ao
-                longo dos anos.
-              </p>
-            </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      {/* SERVIÇOS */}
-      <ServicesCarousel />
+      {/* =================== SERVIÇOS =================== */}
+      <section id="servicos">
+        <ServicesCarousel />
+      </section>
 
-      {/* GALERIA */}
+      {/* =================== GALERIA (lightbox) =================== */}
       <section id="galeria" className="px-5 py-12 md:py-16 bg-white">
         <EventGalleries limit={3} />
       </section>
