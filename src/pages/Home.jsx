@@ -37,11 +37,15 @@ const heroSlides = [
 import nuno5 from "../assets/galeria/nuno-velloso/5.jpg";
 import nuno9 from "../assets/galeria/nuno-velloso/9.jpg";
 import nuno10 from "../assets/galeria/nuno-velloso/10.jpg";
+import nuno7 from "../assets/galeria/nuno-velloso/7.jpg";
+import nuno8 from "../assets/galeria/nuno-velloso/8.jpg";
 
 const bioSlides = [
   { src: nuno5, alt: "Nuno Velloso — foto 1" },
   { src: nuno9, alt: "Nuno Velloso — foto 2" },
   { src: nuno10, alt: "Nuno Velloso — foto 3" },
+  { src: nuno7, alt: "Nuno Velloso — foto 4" },
+  { src: nuno8, alt: "Nuno Velloso — foto 5" },
 ];
 
 export default function Home() {
@@ -201,10 +205,14 @@ export default function Home() {
       </section>
 
       {/* =================== GALERIA (masonry + lightbox) =================== */}
+      {/* =================== GALERIA (masonry + lightbox) =================== */}
       <section id="galeria" className="px-5 py-12 md:py-16 bg-white">
         <div className="container mx-auto">
-          {/* Sem props -> usa automaticamente src/data/galleryItems.js */}
-          <SimpleGallery initial={11} step={24} />
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-8 md:mb-10">
+            Galeria
+          </h2>
+
+          <SimpleGallery initial={8} step={8} />
         </div>
       </section>
     </>

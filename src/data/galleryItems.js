@@ -44,6 +44,17 @@ import col13 from "../assets/galeria/colonias-ferias/13.jpg";
 import v1 from "../assets/galeria/fotos-volteio/1.jpg";
 import v2 from "../assets/galeria/fotos-volteio/2.jpg";
 
+//variados
+import var1 from "../assets/galeria/variados/1.jpg";
+import var2 from "../assets/galeria/variados/2.jpg";
+import var3 from "../assets/galeria/variados/3.jpg";
+import var4 from "../assets/galeria/variados/4.jpg";
+import var5 from "../assets/galeria/variados/5.jpg";
+import var6 from "../assets/galeria/variados/6.jpg";
+import var7 from "../assets/galeria/variados/7.jpg";
+import var8 from "../assets/galeria/variados/8.jpg";
+import var9 from "../assets/galeria/variados/9.jpg";
+
 export const galleryItems = [
   { src: p1, alt: "Passeios — 1" },
   { src: p2, alt: "Passeios — 2" },
@@ -76,6 +87,15 @@ export const galleryItems = [
   { src: col13, alt: "Colónias de férias — 13" },
   { src: v1, alt: "Volteio — 1" },
   { src: v2, alt: "Volteio — 2" },
+  { src: var1, alt: "Variados — 1" },
+  { src: var2, alt: "Variados — 2" },
+  { src: var3, alt: "Variados — 3" },
+  { src: var4, alt: "Variados — 4" },
+  { src: var5, alt: "Variados — 5" },
+  { src: var6, alt: "Variados — 6" },
+  { src: var7, alt: "Variados — 7" },
+  { src: var8, alt: "Variados — 8" },
+  { src: var9, alt: "Variados — 9" },
 ];
 
 // 👇 ESTA LINHA resolve o erro do “does not provide an export named 'default'”

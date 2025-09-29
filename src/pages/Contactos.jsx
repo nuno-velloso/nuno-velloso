@@ -1,3 +1,4 @@
+// src/pages/Contactos.jsx
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -93,7 +94,7 @@ export default function Contactos() {
               </dd>
             </div>
 
-            {/* NOVA SECÇÃO: REDES */}
+            {/* REDES */}
             <div>
               <dt className="font-semibold">Redes:</dt>
               <dd>
@@ -103,7 +104,6 @@ export default function Contactos() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-indigo-600 hover:underline"
                 >
-                  {/* ícone facebook */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -130,9 +130,31 @@ export default function Contactos() {
               </dd>
             </div>
 
+            {/* HORÁRIO (atualizado) */}
             <div>
               <dt className="font-semibold">Horário:</dt>
-              <dd>Das 9h-13h e 15h-18h</dd>
+              <dd>
+                <ul className="mt-1 space-y-1">
+                  <li>
+                    <span className="inline-block w-28 text-gray-500">
+                      Segunda
+                    </span>
+                    Encerrado
+                  </li>
+                  <li>
+                    <span className="inline-block w-28 text-gray-500">
+                      Terça–Sábado
+                    </span>
+                    9h–13h e 15h–18h
+                  </li>
+                  <li>
+                    <span className="inline-block w-28 text-gray-500">
+                      Domingo
+                    </span>
+                    9h–15h
+                  </li>
+                </ul>
+              </dd>
             </div>
           </dl>
 

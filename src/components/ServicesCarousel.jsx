@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 /* IMAGENS — ajusta caminhos/extensões se precisares */
-import imgPasseios from "../assets/galeria/passeios/1.jpg";
+import imgPasseios from "../assets/galeria/passeios/3.jpg";
 import imgVolteio from "../assets/galeria/fotos-volteio/1.jpg";
-import imgIniciacao from "../assets/galeria/aulas-ensino/1.jpg";
-import imgEnsino from "../assets/galeria/aulas-ensino/2.jpg";
+import imgIniciacao from "../assets/galeria/sela/1.jpeg";
+import imgEnsino from "../assets/galeria/aulas-ensino/1.jpg";
 import imgObstaculos from "../assets/galeria/aulas-obstaculos/3.jpg";
-import imgAcompanhamento from "../assets/galeria/aulas-ensino/2.jpg";
-import imgCavaloProprio from "../assets/galeria/colonias-ferias/13.jpg";
-import imgColonia from "../assets/galeria/colonias-ferias/1.jpg";
+import imgAcompanhamento from "../assets/galeria/concursos/2.jpg";
+import imgCavaloProprio from "../assets/galeria/cavalo-proprio/1.jpeg";
+import imgColonia from "../assets/galeria/colonias-ferias/4.jpg";
 import imgConcursos from "../assets/galeria/concursos/1.jpg"; // <- NOVO serviço
 
 const services = [
@@ -20,7 +20,7 @@ const services = [
     desc: "Passeios pela Quinta da Marinha. A escola disponibiliza toque.",
     badges: ["6+ anos", "30–50 min", "≤ 90 kg"],
     img: imgPasseios,
-    imgPos: "center 20%",
+    imgPos: "center 30%",
   },
   {
     slug: "volteio",
@@ -51,6 +51,7 @@ const services = [
     desc: "Iniciação e acompanhamento em competição.",
     badges: ["Treino", "Competição"],
     img: imgObstaculos,
+    imgPos: "20% 40%",
   },
   {
     slug: "acompanhamento",
@@ -58,7 +59,7 @@ const services = [
     desc: "Preparação específica e apoio em prova.",
     badges: ["Sob marcação"],
     img: imgAcompanhamento,
-    imgPos: "center 30%",
+    imgPos: "center 45%",
   },
   {
     slug: "cavalos-proprios",
