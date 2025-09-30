@@ -11,7 +11,7 @@ import imgObstaculos from "../assets/galeria/aulas-obstaculos/3.jpg";
 import imgAcompanhamento from "../assets/galeria/concursos/2.jpg";
 import imgCavaloProprio from "../assets/galeria/cavalo-proprio/1.jpeg";
 import imgColonia from "../assets/galeria/colonias-ferias/4.jpg";
-import imgConcursos from "../assets/galeria/concursos/1.jpg"; // <- NOVO serviço
+import imgConcursos from "../assets/galeria/concursos/5.jpg"; // <- NOVO serviço
 
 const services = [
   {
