@@ -11,7 +11,7 @@ import imgObstaculos from "../assets/galeria/aulas-obstaculos/3.jpg";
 import imgAcompanhamento from "../assets/galeria/concursos/2.jpg";
 import imgCavaloProprio from "../assets/galeria/cavalo-proprio/1.jpeg";
 import imgColonia from "../assets/galeria/colonias-ferias/4.jpg";
-import imgConcursos from "../assets/galeria/concursos/5.jpg"; // <- NOVO serviço
+import imgConcursos from "../assets/galeria/concursos/5.jpg"; // NOVO
 
 const services = [
   {
@@ -76,7 +76,6 @@ const services = [
     img: imgColonia,
     imgPos: "center 20%",
   },
-
   // ===== NOVO SERVIÇO =====
   {
     slug: "concursos",
@@ -138,21 +137,83 @@ export default function ServicesCarousel() {
           </p>
         </div>
 
-        {/* Viewport do carrossel */}
+        {/* Viewport do carrossel (setas fora, slides clipados) */}
         <div
-          className="relative overflow-hidden"
+          className="relative"
           onMouseDown={onPointerDown}
           onMouseUp={onPointerUp}
           onTouchStart={onPointerDown}
           onTouchEnd={onPointerUp}
         >
-          {/* Setas (fora dos cartões) */}
+          {/* viewport que corta os slides */}
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-300 ease-out"
+              style={{ transform: `translateX(-${index * 100}%)` }}
+            >
+              {services.map((s) => {
+                const hasImg = Boolean(s.img);
+                return (
+                  <div key={s.slug} className="w-full shrink-0 px-2">
+                    <article className="mx-auto max-w-7xl overflow-hidden rounded-2xl border bg-white shadow-sm">
+                      <div
+                        className={`grid items-stretch md:h-[360px] ${
+                          hasImg ? "md:grid-cols-2" : "md:grid-cols-1"
+                        }`}
+                      >
+                        {/* Texto */}
+                        <div className="p-6 sm:p-10 flex items-center">
+                          <div>
+                            <h3 className="text-2xl font-semibold text-gray-900">
+                              {s.title}
+                            </h3>
+                            <p className="mt-2 text-gray-700">{s.desc}</p>
+
+                            {s.badges?.length > 0 && (
+                              <ul className="mt-4 flex flex-wrap gap-2">
+                                {s.badges.map((b) => (
+                                  <li
+                                    key={b}
+                                    className="rounded-full border px-2.5 py-1 text-xs text-gray-700"
+                                  >
+                                    {b}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Imagem */}
+                        {hasImg && (
+                          <div className="relative h-[240px] sm:h-[300px] md:h-auto overflow-hidden rounded-t-2xl md:rounded-t-none md:rounded-r-2xl">
+                            <img
+                              src={s.img}
+                              alt={s.title}
+                              className="absolute inset-0 h-full w-full object-cover"
+                              style={{
+                                objectPosition: s.imgPos || "center center",
+                              }}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Setas (fora do viewport) */}
           {count > 1 && (
             <>
               <button
                 onClick={prev}
                 aria-label="Anterior"
-                className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
+                className="hidden md:flex absolute md:-left-10 lg:-left-12 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -171,7 +232,7 @@ export default function ServicesCarousel() {
               <button
                 onClick={next}
                 aria-label="Seguinte"
-                className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
+                className="hidden md:flex absolute md:-right-10 lg:-right-12 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/95 p-3 shadow-lg ring-1 ring-black/5 hover:bg-white"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -189,66 +250,6 @@ export default function ServicesCarousel() {
               </button>
             </>
           )}
-
-          {/* Slides */}
-          <div
-            className="flex transition-transform duration-300 ease-out"
-            style={{ transform: `translateX(-${index * 100}%)` }}
-          >
-            {services.map((s) => {
-              const hasImg = Boolean(s.img);
-              return (
-                <div key={s.slug} className="w-full shrink-0 px-2">
-                  <article className="mx-auto max-w-7xl overflow-hidden rounded-2xl border bg-white shadow-sm">
-                    <div
-                      className={`grid items-stretch md:h-[360px] ${
-                        hasImg ? "md:grid-cols-2" : "md:grid-cols-1"
-                      }`}
-                    >
-                      {/* Texto */}
-                      <div className="p-6 sm:p-10 flex items-center">
-                        <div>
-                          <h3 className="text-2xl font-semibold text-gray-900">
-                            {s.title}
-                          </h3>
-                          <p className="mt-2 text-gray-700">{s.desc}</p>
-
-                          {s.badges?.length > 0 && (
-                            <ul className="mt-4 flex flex-wrap gap-2">
-                              {s.badges.map((b) => (
-                                <li
-                                  key={b}
-                                  className="rounded-full border px-2.5 py-1 text-xs text-gray-700"
-                                >
-                                  {b}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Imagem */}
-                      {hasImg && (
-                        <div className="relative h-[240px] sm:h-[300px] md:h-auto">
-                          <img
-                            src={s.img}
-                            alt={s.title}
-                            className="absolute inset-0 h-full w-full object-cover"
-                            style={{
-                              objectPosition: s.imgPos || "center center",
-                            }}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </article>
-                </div>
-              );
-            })}
-          </div>
         </div>
 
         {/* Pontos */}
