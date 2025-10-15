@@ -126,15 +126,11 @@ export default function ServicesCarousel() {
   return (
     <section id="servicos" className="bg-gray-50 border-t scroll-mt-20">
       <div className="container mx-auto px-5 py-16 md:py-24 relative">
-        {/* Título */}
+        {/* Título (sem horário) */}
         <div className="mb-8 md:mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
             Serviços
           </h2>
-          <p className="mt-3 text-base md:text-lg text-gray-600">
-            A escola está aberta das <strong>9h–13h</strong> e{" "}
-            <strong>15h–18h</strong>.
-          </p>
         </div>
 
         {/* Viewport do carrossel (setas fora, slides clipados) */}
